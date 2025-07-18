@@ -94,6 +94,10 @@ public class Usuario implements UserDetails{
     @JsonManagedReference("usuario-devoluciones")
     private List<Devolucion> devoluciones = new ArrayList<>();
 
+    @OneToMany(mappedBy = "responsable", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JsonManagedReference("usuario-controles")
+    private List<ControlCalidad> controlesCalidad = new ArrayList<>();
+
     public Usuario(String nombre, String apellido, String email, String password, String telefono, boolean estado, boolean disponible, Rol rol) {
         this.nombre = nombre;
         this.apellido = apellido;

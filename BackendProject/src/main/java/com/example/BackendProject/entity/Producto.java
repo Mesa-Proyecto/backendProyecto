@@ -40,7 +40,11 @@ public class Producto {
     private String imagen;          // URL de imagen del producto (opcional)
     private String tiempo;          // Tiempo estimado de producción
     private Double precioUnitario;
-    
+
+    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("producto-controles")
+    private List<ControlCalidad> controlesCalidad = new ArrayList<>();
+
       // Relación ManyToOne con Categoria (agregar esto)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoria_id") // Nombre de la columna en la BD
