@@ -36,15 +36,13 @@ public class ControlCalidad {
     private LocalDate fechaControl;
 
     // Relación con Producto
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "producto_id", nullable = false)
-    @JsonBackReference("producto-controles")
     private Producto producto;
 
     // Relación con Usuario (responsable)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "responsable_id", nullable = false)
-    @JsonBackReference("usuario-controles")
     private Usuario responsable;
 
     /**

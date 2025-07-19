@@ -1,6 +1,7 @@
 package com.example.BackendProject.controller;
 
 import com.example.BackendProject.dto.ControlCalidadDTO;
+import com.example.BackendProject.dto.ControlCalidadResponseDTO;
 import com.example.BackendProject.entity.ControlCalidad;
 import com.example.BackendProject.service.ControlCalidadService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -62,11 +63,12 @@ public class ControlCalidadController {
 
         try {
             ControlCalidad nuevoControl = controlCalidadService.crearControl(controlDTO);
+            ControlCalidadResponseDTO controlResponse = controlCalidadService.convertirAResponseDTO(nuevoControl);
 
             Map<String, Object> response = new HashMap<>();
             response.put("statusCode", HttpStatus.CREATED.value());
             response.put("message", "Control de calidad creado exitosamente");
-            response.put("data", nuevoControl);
+            response.put("data", controlResponse);
 
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         } catch (ResponseStatusException e) {
@@ -90,13 +92,13 @@ public class ControlCalidadController {
             @RequestParam(value = "etapa", required = false) String etapaControl,
             @RequestParam(value = "resultado", required = false) String resultado) {
 
-        List<ControlCalidad> controles;
+        List<ControlCalidadResponseDTO> controles;
 
         // Aplicar filtros si se proporcionan
         if (productoId != null || etapaControl != null || resultado != null) {
-            controles = controlCalidadService.buscarControlesConFiltros(productoId, etapaControl, resultado);
+            controles = controlCalidadService.buscarControlesConFiltrosConInfo(productoId, etapaControl, resultado);
         } else {
-            controles = controlCalidadService.obtenerTodosLosControles();
+            controles = controlCalidadService.obtenerTodosLosControlesConInfo();
         }
 
         Map<String, Object> response = new HashMap<>();
@@ -117,7 +119,7 @@ public class ControlCalidadController {
     )
     public ResponseEntity<?> obtenerControlPorId(@PathVariable Long id) {
         try {
-            ControlCalidad control = controlCalidadService.obtenerControlPorId(id);
+            ControlCalidadResponseDTO control = controlCalidadService.obtenerControlConInfoPorId(id);
 
             Map<String, Object> response = new HashMap<>();
             response.put("statusCode", HttpStatus.OK.value());
@@ -160,11 +162,12 @@ public class ControlCalidadController {
 
         try {
             ControlCalidad controlActualizado = controlCalidadService.actualizarControl(id, controlDTO);
+            ControlCalidadResponseDTO controlResponse = controlCalidadService.convertirAResponseDTO(controlActualizado);
 
             Map<String, Object> response = new HashMap<>();
             response.put("statusCode", HttpStatus.OK.value());
             response.put("message", "Control actualizado exitosamente");
-            response.put("data", controlActualizado);
+            response.put("data", controlResponse);
 
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (ResponseStatusException e) {
@@ -210,7 +213,7 @@ public class ControlCalidadController {
             description = "Retorna todos los controles de calidad de un producto específico"
     )
     public ResponseEntity<?> obtenerControlesPorProducto(@PathVariable Long productoId) {
-        List<ControlCalidad> controles = controlCalidadService.obtenerControlesPorProducto(productoId);
+        List<ControlCalidadResponseDTO> controles = controlCalidadService.obtenerControlesPorProductoConInfo(productoId);
 
         Map<String, Object> response = new HashMap<>();
         response.put("statusCode", HttpStatus.OK.value());
@@ -229,7 +232,7 @@ public class ControlCalidadController {
             description = "Retorna todos los controles de calidad de una etapa específica"
     )
     public ResponseEntity<?> obtenerControlesPorEtapa(@PathVariable String etapaControl) {
-        List<ControlCalidad> controles = controlCalidadService.obtenerControlesPorEtapa(etapaControl);
+        List<ControlCalidadResponseDTO> controles = controlCalidadService.obtenerControlesPorEtapaConInfo(etapaControl);
 
         Map<String, Object> response = new HashMap<>();
         response.put("statusCode", HttpStatus.OK.value());
@@ -248,7 +251,7 @@ public class ControlCalidadController {
             description = "Retorna todos los controles de calidad con un resultado específico"
     )
     public ResponseEntity<?> obtenerControlesPorResultado(@PathVariable String resultado) {
-        List<ControlCalidad> controles = controlCalidadService.obtenerControlesPorResultado(resultado);
+        List<ControlCalidadResponseDTO> controles = controlCalidadService.obtenerControlesPorResultadoConInfo(resultado);
 
         Map<String, Object> response = new HashMap<>();
         response.put("statusCode", HttpStatus.OK.value());
@@ -270,7 +273,7 @@ public class ControlCalidadController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaInicio,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaFin) {
 
-        List<ControlCalidad> controles = controlCalidadService.obtenerControlesPorFechas(fechaInicio, fechaFin);
+        List<ControlCalidadResponseDTO> controles = controlCalidadService.obtenerControlesPorFechasConInfo(fechaInicio, fechaFin);
 
         Map<String, Object> response = new HashMap<>();
         response.put("statusCode", HttpStatus.OK.value());
