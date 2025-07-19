@@ -1,5 +1,5 @@
 package com.example.BackendProject.entity;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -35,13 +35,11 @@ public class ControlCalidad {
     @Column(name = "fecha_control", nullable = false)
     private LocalDate fechaControl;
 
-    // Relación con Producto
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)  // Cambiado a LAZY para mejor rendimiento
     @JoinColumn(name = "producto_id", nullable = false)
     private Producto producto;
 
-    // Relación con Usuario (responsable)
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)  // Cambiado a LAZY para mejor rendimiento
     @JoinColumn(name = "responsable_id", nullable = false)
     private Usuario responsable;
 

@@ -42,7 +42,7 @@ public class Producto {
     private Double precioUnitario;
 
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference("producto-controles")
+    @JsonIgnore  // Evita la serialización para prevenir recursión infinita
     private List<ControlCalidad> controlesCalidad = new ArrayList<>();
 
       // Relación ManyToOne con Categoria (agregar esto)

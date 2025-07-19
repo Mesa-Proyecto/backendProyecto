@@ -95,7 +95,7 @@ public class Usuario implements UserDetails{
     private List<Devolucion> devoluciones = new ArrayList<>();
 
     @OneToMany(mappedBy = "responsable", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JsonManagedReference("usuario-controles")
+    @JsonIgnore  // Evita la serialización para prevenir recursión infinita
     private List<ControlCalidad> controlesCalidad = new ArrayList<>();
 
     public Usuario(String nombre, String apellido, String email, String password, String telefono, boolean estado, boolean disponible, Rol rol) {
